@@ -9,7 +9,7 @@ import Shower from "../components/Shower";
 
 const Wrapper = styled.div`
   background: black;
-  height: 110vh;
+  height: 100vh;
 `;
 
 const Loader = styled.div`
@@ -57,7 +57,6 @@ function Home() {
               Your ultimate companion for a better college experience
             </Overview>
           </Banner>
-          <Shower />
         </>
       )}
     </Wrapper>

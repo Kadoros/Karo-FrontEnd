@@ -49,9 +49,9 @@ export const SubmitBtn = styled.button`
   }
 `;
 
-export const Swicher = styled.span` 
-    margin-top: 20px;
-    a {
-        color: #1d9bf0;
-    }
+export const Swicher = styled.span`
+  margin-top: 20px;
+  a {
+    color: #1d9bf0;
+  }
 `;

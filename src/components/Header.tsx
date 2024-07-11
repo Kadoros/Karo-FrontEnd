@@ -2,135 +2,29 @@ import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useMatch } from "react-router-dom";
-import styled from "styled-components";
 import { auth } from "../firebase";
 import triangleSvg from "../asset/triangle.svg";
-
-const Nav = styled(motion.nav)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  font-size: 14px;
-  padding: 10px 50px;
-  color: white;
-  transition: background-color 0.2s ease-in-out;
-`;
-
-const Wrapper3 = styled(motion.div)`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 14px;
-`;
-
-const Col = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-`;
-
-const Logo = styled(motion.svg)`
-  margin-right: 50px;
-  width: 65px;
-  height: 50px;
-  fill: ${(props) => props.theme.red};
-  path {
-    stroke-width: 6px;
-    stroke: white;
-  }
-`;
-
-const Items = styled.ul`
-  display: flex;
-  align-items: center;
-`;
-
-const Item = styled.li`
-  margin-right: 20px;
-  color: ${(props) => props.theme.white.darker};
-  transition: color 0.3s ease-in-out;
-  &:hover {
-    color: ${(props) => props.theme.white.lighter};
-  }
-  position: relative;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const Search = styled.form`
-  color: white;
-  display: flex;
-  align-items: center;
-  position: relative;
-  svg {
-    height: 25px;
-  }
-  margin-right: 40px;
-`;
-
-const Circle = styled(motion.span)`
-  background-color: ${(props) => props.theme.skyblue};
-  border-radius: 50%;
-  width: 5px;
-  height: 5px;
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-`;
-
-const Input = styled(motion.input)`
-  width: 50vw;
-  max-width: 300px;
-  height: 30px;
-  font-size: 14px;
-  padding-left: 20px;
-  border-radius: 30px;
-  border: 1px solid white;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  transform-origin: right center;
-  position: absolute;
-  left: -270px;
-`;
-
-const AvatarLabel = styled.label`
-  width: 40px;
-  overflow: hidden;
-  height: 40px;
-  border-radius: 20%;
-  background-color: #1d9bf0;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  svg {
-    width: 50px;
-  }
-`;
-const AvatarImg = styled.img`
-  width: 100%;
-`;
-
-const TriangleDiv = styled(motion.div)`
-  width: 13px;
-  overflow: hidden;
-  height: 13px;
-  background-color: transparent;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Triangle = styled(motion.img)`
-  width: 100%;
-`;
+import {
+  Nav,
+  Wrapper3,
+  Col,
+  Manu,
+  Logo,
+  Items,
+  Item,
+  Circle,
+  Search,
+  AvatarLabel,
+  AvatarImg,
+  TriangleDiv,
+  Triangle,
+  Input,
+  ManuItems,
+  ManuItem,
+  ManuDetail,
+  ManuSvg,
+} from "../styles/Header.styles";
+import DarkSwitch from "./ToggleSwitch";
 
 const LogoVariant = {
   normal: {
@@ -200,23 +94,39 @@ function Header() {
   const user = auth.currentUser;
   const [img, setImg] = useState(user?.photoURL);
 
+  const onLogOut = async () => {
+    const ok = window.confirm("Are you sure you want to log out?");
+    if (ok) {
+      await auth.signOut();
+      navigate("/login");
+    }
+  };
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleChange = () => {
+    setIsChecked(!isChecked);
+    console.log(`Dark mode is now ${isChecked ? 'enabled' : 'disabled'}`)
+  };
+
   return (
-    <Nav style={{ backgroundColor }}>
-      <Col>
-        <Logo
-          variants={LogoVariant}
-          initial="normal"
-          whileHover="active"
-          xmlns="http://www.w3.org/2000/svg"
-          width="200"
-          height="200"
-          viewBox="0 0 200 200"
-        >
-          <motion.path
-            fill="#43A5FF"
-            opacity="1.000000"
-            stroke="none"
-            d="
+    <>
+      <Nav style={{ backgroundColor }}>
+        <Col>
+          <Logo
+            variants={LogoVariant}
+            initial="normal"
+            whileHover="active"
+            xmlns="http://www.w3.org/2000/svg"
+            width="200"
+            height="200"
+            viewBox="0 0 200 200"
+          >
+            <motion.path
+              fill="#43A5FF"
+              opacity="1.000000"
+              stroke="none"
+              d="
               M131.698135,57.100464 
               C120.527473,50.931755 109.356812,44.763042 97.604546,38.273151 
               C98.971169,37.201897 99.742371,36.434460 100.653061,35.908569 
@@ -233,12 +143,12 @@ function Header() {
               C133.913452,100.631264 133.887680,80.291870 134.156860,59.279602 
               C133.533936,58.104641 132.616028,57.602554 131.698135,57.100464 
             "
-          />
-          <motion.path
-            fill="#44A6FE"
-            opacity="1.000000"
-            stroke="none"
-            d="
+            />
+            <motion.path
+              fill="#44A6FE"
+              opacity="1.000000"
+              stroke="none"
+              d="
               M77.373108,105.032257 
               C76.078369,103.663223 75.013870,101.900887 73.452698,100.986992 
               C60.254463,93.260963 46.965565,85.689827 32.981644,77.657288 
@@ -252,74 +162,137 @@ function Header() {
               C78.998978,137.942734 79.049904,123.814674 78.928604,109.688103 
               C78.915245,108.131821 77.915421,106.584000 77.373108,105.032257 
             "
-          />
-        </Logo>
-        <Items>
-          <Item>
-            <Link to="/">
-              Home
-              {homeMatch && <Circle layoutId="circle" />}
-            </Link>
-          </Item>
-          <Item>
-            <Link to="/lecture-note">
-              Lecture Note
-              {lectureNoteMatch && <Circle layoutId="circle" />}
-            </Link>
-          </Item>
-        </Items>
-      </Col>
-      <Col>
-        <Search onSubmit={handleSubmit(onValid)}>
-          <motion.svg
-            onClick={toggleSearch}
-            animate={{ x: searchOpen ? -300 : 0 }}
-            transition={{ type: "linear" }}
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              clipRule="evenodd"
             />
-          </motion.svg>
-          <Input
-            {...register("keyword", { required: true, minLength: 2 })}
-            initial={{ scaleX: 0 }}
-            animate={inputAnimation}
-            transition={{ type: "linear" }}
-            placeholder="Search..."
-            type="text"
-          />
-        </Search>
-        <Items>
-          <Item>
-            {user ? (
-              <Wrapper3
-                variants={parentVariants}
-                initial="initial"
-                whileHover="hover"
-                transition={{ type: "tween"}}
-              >
-                <AvatarLabel>
-                  <AvatarImg src={img!} />
-                </AvatarLabel>
-                <TriangleDiv>
-                  <Triangle src={triangleSvg} variants={childVariants} />
-                </TriangleDiv>
-              </Wrapper3>
-            ) : (
-              <Link to="/login">
-                Login
-                {loginMatch && <Circle layoutId="circle" />}
+          </Logo>
+          <Items>
+            <Item>
+              <Link to="/">
+                Home
+                {homeMatch && <Circle layoutId="circle" />}
               </Link>
-            )}
-          </Item>
-        </Items>
-      </Col>
-    </Nav>
+            </Item>
+            <Item>
+              <Link to="/lecture-note">
+                Lecture Note
+                {lectureNoteMatch && <Circle layoutId="circle" />}
+              </Link>
+            </Item>
+          </Items>
+        </Col>
+        <Col>
+          <Search onSubmit={handleSubmit(onValid)}>
+            <motion.svg
+              onClick={toggleSearch}
+              animate={{ x: searchOpen ? -300 : 0 }}
+              transition={{ type: "linear" }}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              />
+            </motion.svg>
+            <Input
+              {...register("keyword", { required: true, minLength: 2 })}
+              initial={{ scaleX: 0 }}
+              animate={inputAnimation}
+              transition={{ type: "linear" }}
+              placeholder="Search..."
+              type="text"
+            />
+          </Search>
+          <Items>
+            <Item>
+              {user ? (
+                <Wrapper3
+                  variants={parentVariants}
+                  initial="initial"
+                  whileHover="hover"
+                  transition={{ type: "tween" }}
+                >
+                  <AvatarLabel>
+                    <AvatarImg src={img!} />
+                  </AvatarLabel>
+                  <TriangleDiv>
+                    <Triangle src={triangleSvg} variants={childVariants} />
+                  </TriangleDiv>
+                </Wrapper3>
+              ) : (
+                <Link to="/login">
+                  Login
+                  {loginMatch && <Circle layoutId="circle" />}
+                </Link>
+              )}
+            </Item>
+          </Items>
+        </Col>
+        <Manu>
+          <ManuItems>
+            <ManuItem>
+              <ManuSvg>
+                <motion.svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="size-5"
+                >
+                  <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
+                </motion.svg>
+              </ManuSvg>
+              <ManuDetail>
+                <Link to="/profile">{user?.displayName}</Link>
+              </ManuDetail>
+            </ManuItem>
+            <ManuItem onClick={handleChange}>
+              <ManuSvg>
+                <motion.svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="size-5"
+                >
+                  <motion.path
+                    fillRule="evenodd"
+                    d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z"
+                    clipRule="evenodd"
+                  />
+                </motion.svg>
+              </ManuSvg>
+              <ManuDetail>
+                Dark Mode
+              </ManuDetail>
+              <DarkSwitch checked={isChecked} onChange={handleChange} />
+            </ManuItem>
+            <ManuItem >
+              <ManuSvg>
+                <motion.svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M17 4.25A2.25 2.25 0 0 0 14.75 2h-5.5A2.25 2.25 0 0 0 7 4.25v2a.75.75 0 0 0 1.5 0v-2a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v11.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75v-2a.75.75 0 0 0-1.5 0v2A2.25 2.25 0 0 0 9.25 18h5.5A2.25 2.25 0 0 0 17 15.75V4.25Z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M14 10a.75.75 0 0 0-.75-.75H3.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 14 10Z"
+                    clipRule="evenodd"
+                  />
+                </motion.svg>
+              </ManuSvg>
+              <ManuDetail onClick={onLogOut}>Log Out</ManuDetail>
+            </ManuItem>
+            
+          </ManuItems>
+        </Manu>
+      </Nav>
+    </>
   );
 }
 
